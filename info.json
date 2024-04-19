@@ -22,11 +22,11 @@
       "type": "select",
       "display": "模型",
       "options": {
-        "command-r": "Command R",
         "command-r-plus": "Command R+",
+        "command-r": "Command R",
+        "command": "Command",
         "command-light": "Command Light",
         "command-light-nightly": "Command Light Nightly",
-        "command": "Command",
         "command-nightly": "Command Nightly"
       }
     },
