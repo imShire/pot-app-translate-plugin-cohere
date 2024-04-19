@@ -12,14 +12,23 @@ pub fn translate(
     _needs: HashMap<String, String>,// 插件需要的其他参数,由info.json定义
 ) -> Result<Value, Box<dyn Error>> {
     let client = reqwest::blocking::ClientBuilder::new().build()?;
-    let apikey = _needs.get("apiKey").unwrap_or_else(|| &"".to_string());
-    let model = _needs.get("model").unwrap_or_else(|| &"command-r-plus".to_string());
-    let mode = _needs.get("mode").unwrap_or_else(|| &"1".to_string());
-    let customize_prompt = _needs.get("customizePrompt").unwrap_or_else(|| &"".to_string());
-    let api_url = _needs.get("apiUrl").unwrap_or_else(|| &"https://api.cohere.ai".to_string());
+    let apikey = _needs.get("apiKey");
+    let model = _needs.get("model");
+    let mode = _needs.get("mode");
+    let customize_prompt = _needs.get("customizePrompt");
+    let api_url = _needs.get("apiUrl");
     let api_url_path = "/v1/chat";
     if apikey.is_empty() {
         return Err("apiKey is required".into());
+    }
+    if model.is_empty() {
+        model = "command-r-plus"
+    }
+    if mode.is_empty() {
+        mode = "1"
+    }
+    if api_url.is_empty() {
+        api_url = "https://api.cohere.ai"
     }
     let full_url = format!("{}{}", api_url, api_url_path);
     let auth_header = format!("bearer {}", apikey);
