@@ -1,10 +1,52 @@
 {
-  "id": "[plugin].com.pot-app.lingva",
+  "id": "[plugin].com.pot-app.cohere",
   "plugin_type": "translate",
-  "icon": "lingva.svg",
-  "display": "Lingva",
-  "homepage": "https://github.com/pot-app/pot-app-translate-plugin-template",
-  "needs": [{ "key": "requestPath", "display": "请求地址" }],
+  "icon": "icon.png",
+  "display": "Cohere",
+  "version": "1.0.1",
+  "author": "imShire",
+  "homepage": "https://github.com/imShire/pot-app-translate-plugin-cohere",
+  "needs": [
+    {
+      "key": "apiUrl",
+      "type": "input",
+      "display": "API URL"
+    },
+    {
+      "key": "apiKey",
+      "type": "input",
+      "display": "API URL"
+    },
+    {
+      "key": "model",
+      "type": "select",
+      "display": "模型",
+      "options": {
+        "command-r": "Command R",
+        "command-r-plus": "Command R+",
+        "command-light": "Command Light",
+        "command-light-nightly": "Command Light Nightly",
+        "command": "Command",
+        "command-nightly": "Command Nightly"
+      }
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "display": "模式",
+      "options": {
+        "1": "翻译",
+        "2": "润色",
+        "3": "提问",
+        "4": "自定义"
+      }
+    },
+    {
+      "key": "customizePrompt",
+      "type": "input",
+      "display": "自定义 Prompt，当模式为自定义时有效"
+    }
+  ],
   "language": {
     "auto": "auto",
     "zh_cn": "zh",

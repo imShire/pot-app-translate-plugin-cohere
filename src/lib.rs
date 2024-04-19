@@ -1,42 +1,45 @@
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::error::Error;
-use urlencoding::encode;
 
 #[no_mangle]
 pub fn translate(
     text: &str, // 待翻译文本
     from: &str, // 源语言
-    to: &str,   // 目标语言
+    to: &str,  // 目标语言
     // (pot会根据info.json 中的 language 字段传入插件需要的语言代码，无需再次转换)
     detect: &str, // 检测到的语言 (若使用 detect, 需要手动转换)
-    needs: HashMap<String, String>, // 插件需要的其他参数,由info.json定义
+    _needs: HashMap<String, String>,// 插件需要的其他参数,由info.json定义
 ) -> Result<Value, Box<dyn Error>> {
     let client = reqwest::blocking::ClientBuilder::new().build()?;
-
-    let mut url = match needs.get("requestPath") {
-        Some(url) => url.to_string(),
-        None => "lingva.pot-app.com".to_string(),
-    };
-    if url.is_empty() {
-        url = "lingva.pot-app.com".to_string();
+    let apikey = _needs.get("apiKey").unwrap_or(&"".to_string());
+    let model = _needs.get("model").unwrap_or(&"command-r-plus".to_string());
+    let mode = _needs.get("mode").unwrap_or(&"1".to_string());
+    let customize_prompt = _needs.get("customizePrompt").unwrap_or(&"".to_string());
+    let apiUrl = _needs.get("apiUrl").unwrap_or(&"https://api.cohere.ai".to_string());
+    let apiUrlPath = "/v1/chat";
+    if apikey.is_empty() {
+        return Err("apiKey is required".into());
     }
-    if !url.starts_with("http") {
-        url = format!("https://{}", url);
-    }
-
-    let plain_text = text.replace("/", "@@");
-    let encode_text = encode(plain_text.as_str());
-
-    let res: Value = client
-        .get(format!("{url}/api/v1/{from}/{to}/{encode_text}"))
+    let body = buildRequestBody(model, mode, customizePrompt, text);
+    let res = client
+        .post(apiUrl + apiUrlPath)
+        .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.32(0x18002035) NetType/WIFI Language/zh_TW")
+        .header("Content-Type", "application/json")
+        .header("accept", "application/json")
+        .header("Authorization", "bearer " + apikey)
+        .json(&body)
         .send()?
         .json()?;
 
     fn parse_result(res: Value) -> Option<String> {
-        let result = res.as_object()?.get("translation")?.as_str()?.to_string();
-
-        Some(result.replace("@@", "/"))
+        let result = res
+        .as_object()?
+        .get("cohereResp")?
+        .as_object()?
+        .get("Text")?
+        .as_str()?;
+        Some(result.to_string())
     }
     if let Some(result) = parse_result(res) {
         return Ok(Value::String(result));
@@ -45,14 +48,40 @@ pub fn translate(
     }
 }
 
+fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &str) -> Value {
+    let prompt = generate_prompts(mode, customize_prompt, query);
+    json!({
+        "model": model,
+        "chat_history": [{"role": "SYSTEM", "message": prompt}],
+        "message": text,
+        "stream": false
+    })
+}
+
+fn generate_prompts(mode: &str, customize_prompt: &str, _query: &str) -> String {
+    let translation_prompt = "You are a professional translation engine, please translate the text into a colloquial, professional, elegant and fluent content, without the style of machine translation. You must only translate the text content, never interpret it.";
+    let user_prompt = match mode {
+        "1" => translation_prompt,
+        "2" => "Please polish this sentence without changing its original meaning",
+        "3" => "Please answer the following question",
+         _ => {
+            if customize_prompt.is_empty() {
+                translation_prompt
+            } else {
+                customize_prompt
+            }
+        }
+    };
+    user_prompt.to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn try_request() {
-        let mut needs = HashMap::new();
-        needs.insert("requestPath".to_string(), "lingva.pot-app.com".to_string());
-        let result = translate("你好 世界！", "auto", "en", "zh_cn", needs).unwrap();
-        println!("{result}");
+        let needs = HashMap::new();
+        let result = translate("Hello", "auto", "zh", "en", needs);
+        println!("{result:?}");
     }
 }
