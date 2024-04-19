@@ -88,7 +88,7 @@ fn generate_prompts(mode: &str, customize_prompt: &str, text: &str, from: &str, 
              format!("{}", customize_prompt);
         }
     };
-    user_prompt.to_string()
+    user_prompt
 }
 
 #[cfg(test)]
