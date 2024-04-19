@@ -4,7 +4,6 @@
   "icon": "icon.png",
   "display": "Cohere",
   "version": "1.0.3",
-  "author": "imShire",
   "homepage": "https://github.com/imShire/pot-app-translate-plugin-cohere",
   "needs": [
     {
