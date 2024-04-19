@@ -11,7 +11,6 @@ pub fn translate(
     detect: &str, // 检测到的语言 (若使用 detect, 需要手动转换)
     _needs: HashMap<String, String>,// 插件需要的其他参数,由info.json定义
 ) -> Result<Value, Box<dyn Error>> {
-
     let client = reqwest::blocking::ClientBuilder::new().build()?;
     let  apikey = _needs.get("apiKey");
     let  model = _needs.get("model");
