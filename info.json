@@ -3,19 +3,19 @@
   "plugin_type": "translate",
   "icon": "icon.png",
   "display": "Cohere",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": "imShire",
   "homepage": "https://github.com/imShire/pot-app-translate-plugin-cohere",
   "needs": [
     {
       "key": "apiUrl",
       "type": "input",
-      "display": "API URL"
+      "display": "请求地址"
     },
     {
       "key": "apiKey",
       "type": "input",
-      "display": "API URL"
+      "display": "Api Key"
     },
     {
       "key": "model",

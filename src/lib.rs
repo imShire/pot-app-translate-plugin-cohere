@@ -11,7 +11,11 @@ pub fn translate(
     _detect: &str, // 检测到的语言 (若使用 detect, 需要手动转换)
     _needs: HashMap<&str, String>,// 插件需要的其他参数,由info.json定义
 ) -> Result<Value, Box<dyn Error>> {
-    let client = reqwest::blocking::ClientBuilder::new().build()?;
+
+    let proxy = reqwest::Proxy::https("http://192.168.50.2:7890")?;
+    let client = reqwest::blocking::ClientBuilder::new().proxy(proxy).build()?;
+
+    // let client = reqwest::blocking::ClientBuilder::new().build()?;
     let default_url = "https://api.cohere.ai".to_string();
     let default_mode = "1".to_string();
     let default_model = "command-r-plus".to_string();
@@ -45,9 +49,10 @@ pub fn translate(
     fn parse_result(res: Value) -> Option<String> {
         let result = res
         .get("text")?
-        .as_str()?;
-        println!("res: \n{}",result.to_string());
-        Some(result.to_string())
+        .as_str()?
+        .to_string();
+        println!("res: \n{}",result);
+        Some(result)
     }
     if let Some(result) = parse_result(res) {
         return Ok(Value::String(result));
