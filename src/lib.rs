@@ -18,21 +18,21 @@ pub fn translate(
     let customize_prompt = _needs.get("customizePrompt");
     let api_url = _needs.get("apiUrl");
     let api_url_path = "/v1/chat";
-    if apikey.is_empty() {
+    if apikey.expect("REASON").is_empty() {
         return Err("apiKey is required".into());
     }
     if model.is_empty() {
         model = "command-r-plus"
     }
-    if mode.is_empty() {
+    if mode.expect("REASON").is_empty() {
         mode = "1"
     }
-    if api_url.is_empty() {
+    if api_url.expect("REASON").is_empty() {
         api_url = "https://api.cohere.ai"
     }
     let full_url = format!("{}{}", api_url, api_url_path);
     let auth_header = format!("bearer {}", apikey);
-    let body = build_request_body(model, mode, customize_prompt, text);
+    let body = build_request_body(model.expect("REASON"), mode.expect("REASON"), customize_prompt.expect("REASON"), text);
     let res = client
         .post(&full_url)
         .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.32(0x18002035) NetType/WIFI Language/zh_TW")
