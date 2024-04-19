@@ -85,7 +85,7 @@ fn generate_prompts(mode: &str, customize_prompt: &str, text: &str, from: &str, 
             format!("{} Embellish in  {} : {}.", "Please answer the following question", from, to);
         },
          _ => {
-             customize_prompt
+             format!("{}", customize_prompt);
         }
     };
     user_prompt.to_string()
