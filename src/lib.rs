@@ -23,17 +23,18 @@ pub fn translate(
         return Err("apiKey is required".into());
     }
     if model.unwrap_or(&"".to_string()).is_empty() {
-        model = Some(&"command-r-plus".to_string());
+        return Err("model is required".into());
     }
     if mode.unwrap_or(&"".to_string()).is_empty() {
-        mode = Some(&"1".to_string());
+        return Err("mode is required".into());
     }
     if api_url.unwrap_or(&"".to_string()).is_empty() {
-        api_url = Some(&"https://api.cohere.ai".to_string());
+        return Err("api_url is required".into());
+        // api_url = Some(&"https://api.cohere.ai".to_string());
     }
     let full_url = format!("{}{}", api_url.unwrap(), api_url_path);
     let auth_header = format!("bearer {}", apikey.unwrap());
-    let body = build_request_body(model.unwrap(), mode.unwrap(), customize_prompt.unwrap(), text);
+    let body = build_request_body(model.unwrap(), mode.unwrap(), customize_prompt.unwrap(), text, from, to);
     let res = client
         .post(&full_url)
         .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.32(0x18002035) NetType/WIFI Language/zh_TW")
@@ -60,8 +61,8 @@ pub fn translate(
     }
 }
 
-fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &str) -> Value {
-    let prompt = generate_prompts(mode, customize_prompt, text);
+fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &str, from: &str, to: &str) -> Value {
+    let prompt = generate_prompts(mode, customize_prompt, text,from,to);
     json!({
         "model": model,
         "chat_history": [{"role": "SYSTEM", "message": prompt}],
@@ -71,10 +72,12 @@ fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &st
     })
 }
 
-fn generate_prompts(mode: &str, customize_prompt: &str, text: &str) -> String {
+fn generate_prompts(mode: &str, customize_prompt: &str, text: &str, from: &str, to: &str) -> String {
     let translation_prompt = "You are a professional translation engine, please translate the text into a colloquial, professional, elegant and fluent content, without the style of machine translation. You must only translate the text content, never interpret it.";
     let user_prompt = match mode {
-        "1" => translation_prompt,
+        "1" => {
+            format!("{} from {} to {}.", translation_prompt, from, to);
+        },
         "2" => "Please polish this sentence without changing its original meaning",
         "3" => "Please answer the following question",
          _ => {
