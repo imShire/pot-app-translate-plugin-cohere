@@ -23,13 +23,13 @@ pub fn translate(
         return Err("apiKey is required".into());
     }
     if model.unwrap_or(&"".to_string()).is_empty() {
-        model = &Some("command-r-plus".to_string());
+        model = Some("command-r-plus".to_string());
     }
     if mode.unwrap_or(&"".to_string()).is_empty() {
-        mode = &Some("1".to_string());
+        mode = Some("1".to_string());
     }
     if api_url.unwrap_or(&"".to_string()).is_empty() {
-        api_url = &Some("https://api.cohere.ai".to_string());
+        api_url = Some("https://api.cohere.ai".to_string());
     }
     let full_url = format!("{}{}", api_url.unwrap(), api_url_path);
     let auth_header = format!("bearer {}", apikey.unwrap());
