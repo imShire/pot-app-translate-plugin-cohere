@@ -27,6 +27,29 @@
 3. 选择刚刚解压得到的 `.potext` 文件，安装成功
 4. 将插件添加到服务列表即可使用
 
+## 设置代理域名
+```sh
+# vercel.json
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "https://api.cohere.ai/$1",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "Host": "api.cohere.ai",
+        "origin": "https://api.cohere.ai",
+        "referer": "https://api.cohere.ai/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+      }
+    }
+  ]
+}
+```
+执行 `vercel -A vercel.json --prod` 并绑定域名部署代理
+
+
 ## 作者
 pot-app-translate-plugin-cohere © [imShire](https://github.com/imShire), Released under the [GPL 3.0](https://github.com/imShire/pot-app-translate-plugin-cohere/blob/main/LICENSE) License.
 
