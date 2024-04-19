@@ -29,7 +29,7 @@
 
 ## 设置代理域名
 ```sh
-# vercel.json
+# cohere.json
 {
   "version": 2,
   "routes": [
@@ -47,7 +47,7 @@
   ]
 }
 ```
-执行 `vercel -A vercel.json --prod` 并绑定域名部署代理
+执行 `vercel -A cohere.json --prod` 并绑定域名部署代理
 
 
 ## 作者
