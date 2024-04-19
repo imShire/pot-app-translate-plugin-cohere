@@ -1,5 +1,5 @@
 {
-  "id": "[plugin].com.pot-app.cohere",
+  "id": "[plugin].com.imShire.cohere",
   "plugin_type": "translate",
   "icon": "icon.png",
   "display": "Cohere",
