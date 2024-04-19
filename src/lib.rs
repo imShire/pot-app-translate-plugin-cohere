@@ -12,11 +12,11 @@ pub fn translate(
     _needs: HashMap<String, String>,// 插件需要的其他参数,由info.json定义
 ) -> Result<Value, Box<dyn Error>> {
     let client = reqwest::blocking::ClientBuilder::new().build()?;
-    let apikey = _needs.get("apiKey").unwrap_or(&"".to_string());
-    let model = _needs.get("model").unwrap_or(&"command-r-plus".to_string());
-    let mode = _needs.get("mode").unwrap_or(&"1".to_string());
-    let customize_prompt = _needs.get("customizePrompt").unwrap_or(&"".to_string());
-    let api_url = _needs.get("apiUrl").unwrap_or(&"https://api.cohere.ai".to_string());
+    let apikey = _needs.get("apiKey").unwrap_or_else(|| "".to_string());
+    let model = _needs.get("model").unwrap_or_else(|| "command-r-plus".to_string());
+    let mode = _needs.get("mode").unwrap_or_else(|| "1".to_string());
+    let customize_prompt = _needs.get("customizePrompt").unwrap_or_else(|| "".to_string());
+    let api_url = _needs.get("apiUrl").unwrap_or_else(|| "https://api.cohere.ai".to_string());
     let api_url_path = "/v1/chat";
     if apikey.is_empty() {
         return Err("apiKey is required".into());
@@ -56,7 +56,8 @@ fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &st
         "model": model,
         "chat_history": [{"role": "SYSTEM", "message": prompt}],
         "message": text,
-        "stream": false
+        "stream": false,
+        "maxTokens": 4000
     })
 }
 
