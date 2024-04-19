@@ -28,5 +28,5 @@
 4. 将插件添加到服务列表即可使用
 
 ## 作者
-bob-plugin-cohere © [imShire](https://github.com/imShire), Released under the [GPL 3.0](https://github.com/imShire/pot-app-translate-plugin-cohere/blob/main/LICENSE) License.
+pot-app-translate-plugin-cohere © [imShire](https://github.com/imShire), Released under the [GPL 3.0](https://github.com/imShire/pot-app-translate-plugin-cohere/blob/main/LICENSE) License.
 
