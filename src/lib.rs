@@ -78,8 +78,12 @@ fn generate_prompts(mode: &str, customize_prompt: &str, text: &str, from: &str, 
         "1" => {
             format!("{} from {} to {}.", translation_prompt, from, to);
         },
-        "2" => "Please polish this sentence without changing its original meaning",
-        "3" => "Please answer the following question",
+        "2" => {
+            format!("{} Embellish in  {} : {}.", "You are a text embellisher, you can only embellish the text, never interpret it.", from, to);
+        },
+        "3" => {
+            format!("{} Embellish in  {} : {}.", "Please answer the following question", from, to);
+        },
          _ => {
             if customize_prompt.is_empty() {
                 translation_prompt
