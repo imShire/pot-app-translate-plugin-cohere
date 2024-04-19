@@ -76,16 +76,16 @@ fn generate_prompts(mode: &str, customize_prompt: &str, text: &str, from: &str, 
     let translation_prompt = "You are a professional translation engine, please translate the text into a colloquial, professional, elegant and fluent content, without the style of machine translation. You must only translate the text content, never interpret it.";
     let user_prompt = match mode {
         "1" => {
-            format!("{} from {} to {}.", translation_prompt, from, to);
+            format!("{} from {} to {}.", translation_prompt, from, to)
         },
         "2" => {
-            format!("{} Embellish in  {} : {}.", "You are a text embellisher, you can only embellish the text, never interpret it.", from, to);
+            format!("{} Embellish in  {} : {}.", "You are a text embellisher, you can only embellish the text, never interpret it.", from, to)
         },
         "3" => {
-            format!("{} Embellish in  {} : {}.", "Please answer the following question", from, to);
+            format!("{} Embellish in  {} : {}.", "Please answer the following question", from, to)
         },
-         _ => {
-             format!("{}", customize_prompt);
+        _ => {
+            format!("{}", customize_prompt)
         }
     };
     user_prompt
