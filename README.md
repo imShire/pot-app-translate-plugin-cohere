@@ -3,7 +3,7 @@
 ## 特征
 - 支持 Command R+, Command R, Command, Command Nightly, Command Light, Command Light Nightly .
 - 暂不支持流响应。
-- 支持翻译、润色、提问、自定义提示。
+- 支持翻译、润色、总结、自定义提示。
 
 ## 支持平台
 
