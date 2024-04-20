@@ -1,0 +1,77 @@
+{
+  "id": "[plugin].com.imShire.cohere",
+  "plugin_type": "translate",
+  "icon": "icon.png",
+  "display": "Cohere",
+  "version": "1.0.3",
+  "homepage": "https://github.com/imShire/pot-app-translate-plugin-cohere",
+  "needs": [
+    {
+      "key": "apiUrl",
+      "type": "input",
+      "display": "请求地址"
+    },
+    {
+      "key": "apiKey",
+      "type": "input",
+      "display": "Api Key"
+    },
+    {
+      "key": "model",
+      "type": "select",
+      "display": "模型",
+      "options": {
+        "command-r-plus": "Command R+",
+        "command-r": "Command R",
+        "command": "Command",
+        "command-light": "Command Light",
+        "command-light-nightly": "Command Light Nightly",
+        "command-nightly": "Command Nightly"
+      }
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "display": "模式",
+      "options": {
+        "1": "翻译",
+        "2": "润色",
+        "3": "提问",
+        "4": "自定义"
+      }
+    },
+    {
+      "key": "customizePrompt",
+      "type": "input",
+      "display": "自定义 Prompt，当模式为自定义时有效"
+    }
+  ],
+  "language": {
+    "auto": "auto",
+    "zh_cn": "zh",
+    "zh_tw": "zh_HANT",
+    "en": "en",
+    "ja": "ja",
+    "ko": "ko",
+    "fr": "fr",
+    "es": "es",
+    "ru": "ru",
+    "de": "de",
+    "it": "it",
+    "tr": "tr",
+    "pt_pt": "pt",
+    "pt_br": "pt",
+    "vi": "vi",
+    "id": "id",
+    "th": "th",
+    "ms": "ms",
+    "ar": "ar",
+    "hi": "hi",
+    "mn_cy": "mn",
+    "mn_mo": "mn",
+    "km": "km",
+    "nb_no": "no",
+    "nn_no": "no",
+    "fa": "fa"
+  }
+}
