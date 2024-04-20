@@ -57,7 +57,9 @@ pub fn translate(
     }
     let full_url = format!("{}{}", api_url, api_url_path);
     let auth_header = format!("bearer {}", apikey.unwrap());
-    let body = build_request_body(&model, &mode, &customize_prompt, text, from, to);
+    let prompt = generate_prompts(&mode, &customize_prompt);
+    let user_prompt = generate_user_prompts(&mode, &text, &from, &to, detect);
+    let body = build_request_body(&model, &user_prompt, &prompt);
     let res = client
         .post(&full_url)
         .header("Content-Type", "application/json")
@@ -81,8 +83,7 @@ pub fn translate(
     }
 }
 
-fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &str, from: &str, to: &str) -> Value {
-    let prompt = generate_prompts(mode, customize_prompt,from,to);
+fn build_request_body(model: &str,  text: &str, prompt: &str) -> Value {
     json!({
         "model": model,
         "chat_history": [{"role": "SYSTEM", "message": prompt}],
@@ -92,20 +93,38 @@ fn build_request_body(model: &str, mode: &str, customize_prompt: &str, text: &st
     })
 }
 
-fn generate_prompts(mode: &str, customize_prompt: &str, from: &str, to: &str) -> String {
+fn generate_prompts(mode: &str, customize_prompt: &str) -> String {
     let translation_prompt = "You are a professional translation engine, please translate the text into a colloquial, professional, elegant and fluent content, without the style of machine translation. You must only translate the text content, never interpret it.";
     let user_prompt = match mode {
         "1" => {
-            format!("{} from {} to {}.", translation_prompt, from, to)
+            format!("{}", translation_prompt)
         },
         "2" => {
-            format!("{} Embellish in  {} : {}.", "You are a text embellisher, you can only embellish the text, never interpret it.", from, to)
+            format!("{}", "You are a text embellisher, you can only embellish the text, never interpret it.")
         },
         "3" => {
-            format!("{} Embellish in  {} : {}.", "Please answer the following question", from, to)
+            format!("{}", "You are a text summarizer, you can only summarize the text, never interpret it.")
         },
         _ => {
             format!("{}", customize_prompt)
+        }
+    };
+    user_prompt
+}
+
+fn generate_user_prompts(mode: &str, text: &str, from: &str, to: &str, detect: &str) -> String {
+    let user_prompt = match mode {
+        "1" => {
+            format!("from {} Translate into {}: \n {}", from, to, text)
+        },
+        "2" => {
+            format!("from {} Embellish in {}: \n {}", from, detect, text)
+        },
+        "3" => {
+            format!("from {} Summarize in {}: \n {}", from, to, text)
+        },
+        _ => {
+            format!("from {} Translate into {}: \n {}", from, to, text)
         }
     };
     user_prompt
