@@ -51,19 +51,15 @@ pub fn translate(
         }
     };
     let apikey = needs.get("apiKey");
-    // let  api_url = needs.get("apiUrl");
     let api_url_path = "/v1/chat";
     if apikey.unwrap_or(&&"".to_string()).is_empty() {
         return Err("apiKey is required".into());
     }
-    println!("using default: \n{}\n{}\n{}\n{}\n", api_url,model,mode,apikey.unwrap());
     let full_url = format!("{}{}", api_url, api_url_path);
     let auth_header = format!("bearer {}", apikey.unwrap());
     let body = build_request_body(&model, &mode, &customize_prompt, text, from, to);
-    println!("body: \n{}\n{}\n{}\n", full_url,auth_header,body);
     let res = client
         .post(&full_url)
-        // .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.32(0x18002035) NetType/WIFI Language/zh_TW")
         .header("Content-Type", "application/json")
         .header("accept", "application/json")
         .header("Authorization", &auth_header)
@@ -71,13 +67,11 @@ pub fn translate(
         .send()?
         .json()?;
 
-    println!("res: \n{}", res);
     fn parse_result(res: Value) -> Option<String> {
         let result = res
         .get("text")?
         .as_str()?
         .to_string();
-        println!("res: \n{}",result);
         Some(result)
     }
     if let Some(result) = parse_result(res) {
