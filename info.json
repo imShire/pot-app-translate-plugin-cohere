@@ -3,7 +3,7 @@
   "plugin_type": "translate",
   "icon": "icon.png",
   "display": "Cohere",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "homepage": "https://github.com/imShire/pot-app-translate-plugin-cohere",
   "needs": [
     {
